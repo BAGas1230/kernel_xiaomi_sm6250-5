@@ -53,7 +53,6 @@
 #define PROC_ENTER_TEST_ENVIRONMENT             14
 #define PROC_NAME                               "ftxxxx-debug"
 #define PROC_BUF_SIZE                           256
-extern void lcd_esd_enable(bool on);
 /*****************************************************************************
 * Private enumerations, structures and unions using typedef
 *****************************************************************************/
@@ -883,7 +882,6 @@ static ssize_t fts_fwupgradebin_store(struct device *dev, struct device_attribut
 		FTS_ERROR("fw bin name's length(%d) fail", (int)count);
 		return -EINVAL;
 	}
-	lcd_esd_enable(false);
 	memset(fwname, 0, sizeof(fwname));
 	snprintf(fwname, FILE_NAME_LENGTH, "%s", buf);
 	fwname[count - 1] = '\0';
@@ -893,7 +891,6 @@ static ssize_t fts_fwupgradebin_store(struct device *dev, struct device_attribut
 	fts_upgrade_bin(fwname, 0);
 	mutex_unlock(&input_dev->mutex);
 	msleep(800);
-	lcd_esd_enable(true);
 	return count;
 }
 

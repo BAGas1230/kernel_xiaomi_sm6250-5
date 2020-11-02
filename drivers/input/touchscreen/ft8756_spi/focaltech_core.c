@@ -83,7 +83,6 @@ int enter_palm_mode(struct fts_ts_data *data);
 int32_t fts_ts_enable_regulator(bool en);
 extern void set_lcd_reset_gpio_keep_high(bool en);
 extern int32_t fts_ts_enable_regulator(bool en);
-extern void lcd_esd_enable(bool on);
 static bool delay_gesture;
 static bool g_regulator_status;
 
@@ -1453,7 +1452,6 @@ static int fts_ts_probe_entry(struct fts_ts_data *ts_data)
 {
 	int ret = 0;
 	int pdata_size = sizeof(struct fts_ts_platform_data);
-	lcd_esd_enable(0);
 	FTS_FUNC_ENTER();
 	FTS_INFO("%s", FTS_DRIVER_VERSION);
 	ts_data->pdata = kzalloc(pdata_size, GFP_KERNEL);
@@ -1595,7 +1593,6 @@ static int fts_ts_probe_entry(struct fts_ts_data *ts_data)
 #if LCT_TP_USB_PLUGIN
 	g_touchscreen_usb_pulgin.event_callback = fts_ts_usb_event_callback;
 #endif
-	lcd_esd_enable(1);
 	if (ts_data->fts_tp_class == NULL) {
 		if (ts_data->fts_tp_class) {
 			ts_data->fts_touch_dev = device_create(ts_data->fts_tp_class, NULL, 0x38, ts_data, "tp_dev");
@@ -1713,7 +1710,6 @@ static int fts_ts_suspend(struct device *dev)
 		FTS_INFO("fw upgrade in process, can't suspend");
 		return 0;
 	}
-	lcd_esd_enable(0);
 
 #if FTS_ESDCHECK_EN
 	fts_esdcheck_suspend();
@@ -1791,7 +1787,6 @@ static int fts_ts_resume(struct device *dev)
 	if (g_touchscreen_usb_pulgin.valid)
 		g_touchscreen_usb_pulgin.event_callback();
 #endif
-	lcd_esd_enable(1);
 	FTS_FUNC_EXIT();
 	return 0;
 }
